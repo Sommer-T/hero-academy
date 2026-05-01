@@ -10,9 +10,19 @@ Welcome to my GitHub — where I build real things for real people, and document
 
 ## 🚀 What I'm Building Right Now
 
-### 🦸🏾 Hero Academy *(In Development — Launching April 29, 2026)*
-A full-stack educational web app built for my grandson Carlo, a gifted 10-year-old who needed something better than flat math drills. Features a math challenge system with XP and unlockable powers, and interactive story missions framed as hero journals.
-Built with Python, Flask, JavaScript, HTML, and CSS.
+### 🦸🏾 Hero Academy *(Live Playable Build — Actively Expanding)*
+A custom educational game platform built for my grandson Carlo, a gifted 10-year-old learner who needed more than standard drills.
+
+Hero Academy transforms learning into an adventure with:
+
+* 🧠 Adaptive Math Arena with advanced Beast Mode challenges
+* ✍🏾 Writing Quest with XP rewards
+* 🏆 Progress Dashboard + competitive leaderboard
+* 👹 Boss Battle Mode with unlockable elite challenges
+* 💾 SQLite save system for persistent progress
+* 🎆 Sound effects, confetti, and victory animations
+
+Built with Python, Flask, SQLite, HTML, CSS, and JavaScript.
 👉 [View the project](https://github.com/Sommer-T/hero-academy)
 
 ### 🐍 100 Days of Python *(Active)*
