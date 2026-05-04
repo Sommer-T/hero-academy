@@ -12,11 +12,20 @@ It transforms education into a **personalized, high-challenge, identity-driven e
 
 ## 🎮 Preview
 
-> (Add screenshots here once ready)
+### 🏠 Start Screen
+![Start Screen](./static/screenshots/start-screen.png)
 
-![Start Screen](./static/img/start-screen.png)
-![Math Arena](./static/img/math-arena.png)
-![Victory Screen](./static/img/victory.png)
+### 🧠 Math Arena
+![Math Arena](./static/screenshots/math-arena.png)
+
+### ✍🏾 Writing Quest
+![Writing Quest](./static/screenshots/writing-quest.png)
+
+### 🏆 Progress Dashboard
+![Progress Dashboard](./static/screenshots/progress-dashboard.png)
+
+### 👹 Boss Battle Mode
+![Boss Battle](./static/screenshots/boss-battle.png)
 
 ---
 
