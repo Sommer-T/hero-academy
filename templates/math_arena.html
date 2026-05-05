@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Math Arena | Hero Academy</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #ffffff;
+            background: radial-gradient(circle at top, #073b75 0%, #07194a 45%, #030b24 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .arena-card {
+            width: min(760px, 100%);
+            background: rgba(8, 22, 64, 0.88);
+            border: 2px solid rgba(255, 215, 64, 0.85);
+            border-radius: 28px;
+            padding: 32px;
+            box-shadow: 0 0 32px rgba(255, 215, 64, 0.22);
+            text-align: center;
+        }
+
+        .arena-card.level-up {
+            animation: levelPulse 1.4s ease-in-out 2;
+        }
+
+        .arena-card.shake {
+            animation: shake 0.35s ease-in-out;
+        }
+
+        .confetti-piece {
+            position: fixed;
+            top: -20px;
+            width: 10px;
+            height: 16px;
+            border-radius: 3px;
+            pointer-events: none;
+            animation: fall 1.6s linear forwards;
+            z-index: 9999;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes levelPulse {
+            0% { box-shadow: 0 0 32px rgba(255, 215, 64, 0.22); transform: scale(1); }
+            50% { box-shadow: 0 0 55px rgba(255, 215, 64, 0.75); transform: scale(1.015); }
+            100% { box-shadow: 0 0 32px rgba(255, 215, 64, 0.22); transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            50% { transform: translateX(8px); }
+            75% { transform: translateX(-5px); }
+        }
+
+        .eyebrow {
+            margin: 0 0 10px;
+            color: #ffd84d;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0 0 16px;
+            font-size: clamp(2.2rem, 8vw, 4rem);
+            color: #ffd84d;
+            text-shadow: 0 0 18px rgba(255, 216, 77, 0.5);
+        }
+
+        .xp-panel,
+        .adaptive-panel {
+            background: rgba(28, 64, 150, 0.8);
+            border-radius: 18px;
+            padding: 16px;
+            margin: 20px auto;
+        }
+
+        .xp-bar {
+            height: 16px;
+            background: rgba(255, 255, 255, 0.18);
+            border-radius: 999px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .xp-fill {
+            height: 100%;
+            width: {{ total_xp|default(0) % 100 }}%;
+            background: linear-gradient(90deg, #ffb000, #ffd84d);
+            border-radius: 999px;
+            transition: width 0.4s ease;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 14px;
+            padding: 12px 8px;
+        }
+
+        .stat-box span {
+            display: block;
+            color: #ffd84d;
+            font-size: 1.35rem;
+            font-weight: 900;
+        }
+
+        .ai-note {
+            margin: 12px 0 0;
+            color: #d8e6ff;
+            font-size: 0.98rem;
+            line-height: 1.4;
+        }
+
+        .story {
+            font-size: 1.15rem;
+            line-height: 1.5;
+            margin: 24px 0 12px;
+        }
+
+        .question {
+            font-size: clamp(2.4rem, 9vw, 4.8rem);
+            margin: 18px 0;
+            color: #ffffff;
+        }
+
+        .hint {
+            color: #d8e6ff;
+            margin-bottom: 24px;
+        }
+
+        form {
+            display: grid;
+            gap: 14px;
+            margin-top: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 18px;
+            border-radius: 16px;
+            border: 3px solid #ffd84d;
+            font-size: 1.4rem;
+            text-align: center;
+            outline: none;
+        }
+
+        button,
+        .home-link,
+        .reset-link {
+            border: none;
+            border-radius: 18px;
+            padding: 18px 22px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        button {
+            background: linear-gradient(90deg, #ffb000, #ff6b00);
+        }
+
+        button:hover,
+        .home-link:hover,
+        .reset-link:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.08);
+        }
+
+        .feedback {
+            margin: 20px 0;
+            padding: 16px;
+            border-radius: 16px;
+            font-weight: 800;
+        }
+
+        .feedback.correct {
+            background: rgba(0, 190, 90, 0.25);
+            border: 2px solid #00d26a;
+        }
+
+        .feedback.incorrect {
+            background: rgba(255, 120, 0, 0.22);
+            border: 2px solid #ff9f1a;
+        }
+
+        .unlock-panel {
+            margin: 20px 0;
+            padding: 18px;
+            border-radius: 18px;
+            background: rgba(220, 38, 38, 0.16);
+            border: 2px solid rgba(248, 113, 113, 0.9);
+            box-shadow: 0 0 22px rgba(248, 113, 113, 0.18);
+            animation: bossGlow 1.6s ease-in-out infinite alternate;
+        }
+
+        @keyframes bossGlow {
+            from { box-shadow: 0 0 18px rgba(248, 113, 113, 0.25); }
+            to { box-shadow: 0 0 34px rgba(248, 113, 113, 0.7); }
+        }
+
+        .unlock-panel.locked {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: none;
+        }
+
+        .unlock-panel h2 {
+            margin: 0 0 8px;
+            color: #fecaca;
+            font-size: 1.45rem;
+        }
+
+        .unlock-panel p {
+            margin: 6px 0;
+            color: #ffe4e6;
+            line-height: 1.45;
+        }
+
+        .boss-link {
+            margin-top: 12px;
+            display: inline-block;
+            padding: 16px 20px;
+            border-radius: 16px;
+            background: linear-gradient(90deg, #dc2626, #f97316);
+            color: white;
+            font-weight: 900;
+            text-decoration: none;
+            box-shadow: 0 0 18px rgba(248, 113, 113, 0.45);
+        }
+
+        .boss-link:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.08);
+        }
+
+        .reward {
+            color: #ffd84d;
+            font-weight: 800;
+        }
+
+        .link-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 22px;
+        }
+
+        .home-link {
+            background: rgba(255, 255, 255, 0.14);
+        }
+
+        .reset-link {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        @media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .arena-card {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="arena-card" id="arenaCard">
+        <p class="eyebrow">Hero Training Zone</p>
+        <h1>🧠 Math Arena</h1>
+
+        <section class="xp-panel">
+            <strong>⭐ Total XP: {{ total_xp|default(0) }}</strong>
+            <div class="xp-bar" aria-label="XP progress bar">
+                <div class="xp-fill"></div>
+            </div>
+        </section>
+
+        <section class="adaptive-panel">
+            <strong>🤖 Adaptive Challenge Engine</strong>
+            <div class="stats-grid">
+                <div class="stat-box">Level<span>{{ adaptive_level|default(4) }}</span></div>
+                <div class="stat-box">Streak<span>{{ current_streak|default(0) }}</span></div>
+                <div class="stat-box">Best<span>{{ best_streak|default(0) }}</span></div>
+                <div class="stat-box">Accuracy<span>{{ accuracy|default(0) }}%</span></div>
+            </div>
+            <p class="ai-note">{{ level_message|default("The arena is watching your moves. Stack correct answers to unlock harder missions.") }}</p>
+        </section>
+
+
+        {% if feedback %}
+            <div class="feedback {{ feedback.status }}" data-feedback="{{ feedback.status }}">
+                {{ feedback.message }}
+            </div>
+        {% endif %}
+
+        {% if adaptive_level|default(0) >= 15 %}
+            <section class="unlock-panel">
+                <h2>👹 Boss Battle Mode Unlocked</h2>
+                <p>Three elite phases. Three chances to strike. Defeat the boss and earn a massive XP bonus.</p>
+                <a class="boss-link" href="/boss-battle">Enter Boss Battle ⚔️</a>
+            </section>
+        {% else %}
+            <section class="unlock-panel locked">
+                <h2>🔒 Boss Battle Locked</h2>
+                <p>Reach Level 15 to unlock the first elite boss fight.</p>
+                <p>Current Level: {{ adaptive_level|default(0) }} · Levels needed: {{ 15 - adaptive_level|default(0) }}</p>
+            </section>
+        {% endif %}
+
+        <p class="story">{{ problem.story_context }}</p>
+        <h2 class="question">{{ problem.question }}</h2>
+        <p class="hint">💡 Hint: {{ problem.hint }}</p>
+        <p class="reward">XP Reward: {{ problem.xp_reward }}</p>
+
+        <form method="POST">
+            <input
+                type="number"
+                name="answer"
+                placeholder="Enter your answer"
+                autocomplete="off"
+                required
+                autofocus
+            />
+            <button type="submit">⚡ Launch Answer</button>
+        </form>
+
+        <div class="link-row">
+            <a class="home-link" href="/">⬅ Back Home</a>
+            <a class="reset-link" href="/reset-arena">↻ Reset Arena</a>
+        </div>
+    </main>
+
+    <script>
+        function playTone(frequency, duration, type = "sine", volume = 0.08) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContext) return;
+
+            const audioContext = new AudioContext();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            oscillator.frequency.value = frequency;
+            oscillator.type = type;
+
+            gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+
+        function playVictorySound() {
+            playTone(523, 0.16, "triangle", 0.1);
+            setTimeout(() => playTone(659, 0.16, "triangle", 0.1), 140);
+            setTimeout(() => playTone(784, 0.18, "triangle", 0.1), 280);
+            setTimeout(() => playTone(1047, 0.25, "triangle", 0.11), 430);
+        }
+
+        function playErrorSound() {
+            playTone(220, 0.18, "sawtooth", 0.07);
+            setTimeout(() => playTone(165, 0.22, "sawtooth", 0.06), 160);
+        }
+
+        function launchConfetti() {
+            const colors = ["#ffd84d", "#ff6b00", "#00d26a", "#38bdf8", "#f472b6", "#ffffff"];
+
+            for (let i = 0; i < 80; i++) {
+                const piece = document.createElement("div");
+                piece.className = "confetti-piece";
+                piece.style.left = `${Math.random() * 100}vw`;
+                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.animationDelay = `${Math.random() * 0.35}s`;
+                piece.style.animationDuration = `${1.2 + Math.random() * 1.2}s`;
+                document.body.appendChild(piece);
+
+                setTimeout(() => piece.remove(), 2600);
+            }
+        }
+
+        const arenaCard = document.getElementById("arenaCard");
+        const feedback = document.querySelector("[data-feedback]");
+
+        if (feedback?.dataset.feedback === "correct") {
+            playVictorySound();
+            launchConfetti();
+            arenaCard?.classList.add("level-up");
+        } else if (feedback?.dataset.feedback === "incorrect") {
+            playErrorSound();
+            arenaCard?.classList.add("shake");
+        }
+    </script>
+</body>
+</html>

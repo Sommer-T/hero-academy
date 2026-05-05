@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hero Academy</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(180deg, #020b2d, #071c52, #020b2d);
+    min-height: 100vh;
+    color: white;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at top right, rgba(0, 180, 255, .18), transparent 30%),
+        radial-gradient(circle at bottom left, rgba(255, 0, 60, .18), transparent 30%);
+    z-index: -1;
+}
+
+.screen {
+    max-width: 430px;
+    margin: auto;
+    padding: 22px;
+    text-align: center;
+}
+
+.hero-box {
+    margin-top: 20px;
+}
+
+.hero-box img {
+    width: 100%;
+    border-radius: 28px;
+    border: 3px solid gold;
+    box-shadow: 0 0 40px rgba(0, 174, 255, .45);
+}
+
+h1 {
+    font-size: 3rem;
+    margin-top: 20px;
+    color: #ffd84a;
+    letter-spacing: 2px;
+    text-shadow: 0 0 12px rgba(255, 216, 74, .6);
+}
+
+.tagline {
+    color: #d9e7ff;
+    margin-top: 8px;
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+.level {
+    margin-top: 14px;
+    background: #132a66;
+    padding: 12px;
+    border-radius: 14px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.menu {
+    margin-top: 28px;
+    display: grid;
+    gap: 14px;
+}
+
+.menu a {
+    display: block;
+    width: 100%;
+    text-decoration: none;
+}
+
+.btn {
+    padding: 18px;
+    border: none;
+    border-radius: 18px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .25s ease;
+    color: white;
+    width: 100%;
+}
+
+.btn:hover {
+    transform: translateY(-3px) scale(1.02);
+}
+
+.start {
+    background: linear-gradient(90deg, #ffb300, #ff6f00);
+}
+
+.math {
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+}
+
+.write {
+    background: linear-gradient(90deg, #9d4edd, #5a189a);
+}
+
+.progress {
+    background: linear-gradient(90deg, #16c60c, #0b8d00);
+}
+
+.settings {
+    background: linear-gradient(90deg, #444, #222);
+}
+
+.footer {
+    margin-top: 24px;
+    font-size: .95rem;
+    color: #c7d5ff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="screen">
+
+    <div class="hero-box">
+        <img src="{{ url_for('static', filename='images/Carlo_main_photo.png') }}" alt="Hero Academy main character">
+    </div>
+
+    <h1>HERO ACADEMY</h1>
+
+    <p class="tagline">
+        Smarter every day.<br>
+        Stronger every level.
+    </p>
+
+    <div class="level">
+        ⭐ Level 1 Hero | XP: 0 / 100
+    </div>
+
+    <div class="menu">
+        <a href="/math-arena"><button class="btn start">▶ Start Mission</button></a>
+        <a href="/math-arena">
+            <button class="btn math">🧠 Math Arena</button>
+        </a>
+       <a href="/writing-quest"><button class="btn write">✍🏾 Writing Quest</button></a>
+        <a href="/dashboard"><button class="btn progress">🏆 Progress</button></a>
+        <button class="btn settings">⚙ Settings</button>
+    </div>
+
+    <div class="footer">
+        Built by Grandma. Powered by Genius. 👑
+    </div>
+
+</div>
+
+</body>
+</html>
